@@ -2,7 +2,7 @@ function montecarlo1(handles, function_fx, batas_atas, batas_bawah, N, K)
 
 hasil_integral = [];
 
-for i = 1000:1000:N
+for i = 1000:100:N
     hasil_fx = [];
     rand_num = batas_bawah + (batas_atas - batas_bawah).*rand(i,1);
     for j = 1:i
@@ -22,6 +22,6 @@ for i = 1000:1000:N
 end
 
 axes(handles.axes1);
-plot((1000:1000:N), hasil_integral)
+plot((1000:100:N), hasil_integral)
 
 end
