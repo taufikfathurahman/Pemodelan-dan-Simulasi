@@ -22,7 +22,7 @@ function varargout = monte_varlo_integration(varargin)
 
 % Edit the above text to modify the response to help monte_varlo_integration
 
-% Last Modified by GUIDE v2.5 17-Apr-2019 19:48:12
+% Last Modified by GUIDE v2.5 18-Apr-2019 13:10:11
 
 % Begin initialization code - DO NOT EDIT
 gui_Singleton = 1;
@@ -78,30 +78,41 @@ function hitung_button_Callback(hObject, eventdata, handles)
 % hObject    handle to hitung_button (see GCBO)
 % eventdata  reserved - to be defined in a future version of MATLAB
 % handles    structure with handles and user data (see GUIDATA)
+
 function_fx = get(handles.input_fx, 'String');
 batas_atas = get(handles.batas_atas, 'String');
 batas_bawah = get(handles.batas_bawah, 'String');
 N = get(handles.nilai_n, 'String');
 K = get(handles.nilai_k, 'String');
+f_min = get(handles.fmin, 'String');
+f_max = get(handles.fmax, 'String');
 
 batas_atas = str2double(batas_atas);
 batas_bawah = str2double(batas_bawah);
 N = str2double(N);
 K = str2double(K);
+f_min = str2double(f_min);
+f_max = str2double(f_max);
 
 selected_method = get(get(handles.metode_integral,'SelectedObject'), 'string');
 switch selected_method
     case 'Eksak'
         function_fx = strcat('@(x) ', function_fx);
-        hasil = integral(eval(function_fx), batas_bawah, batas_atas);
-        set(handles.output_eksak, 'String', num2str(hasil));
+        hasil_eksak = integral(eval(function_fx), batas_bawah, batas_atas);
+        set(handles.output_eksak, 'String', num2str(hasil_eksak));
+        axes(handles.axes1);
+        plot((1000:100:N), repmat(hasil_eksak, size(1000:100:N)));
+        xlabel('N Values'); 
+        ylabel('Integration Result');
+        legend('Eksak');
     case 'Monte Carlo 1'
-        montecarlo1(handles, function_fx, batas_atas, batas_bawah, N);
+        montecarlo1(handles, function_fx, batas_atas, batas_bawah, N, K);
     case 'Monte Carlo 2'
-        montecarlo2(handles, function_fx, batas_atas, batas_bawah, N, K);
-%     case 'Rectangular'
-%         
-%     case 'Trapezoidal'
+        montecarlo2(handles, function_fx, batas_atas, batas_bawah, f_min, f_max, N);
+    case 'Rectangular'
+        rectangular(handles);
+    case 'Trapezoidal'
+        trapezoidal(handles);
 end
 
 % --- Executes on button press in one.
@@ -386,6 +397,52 @@ function nilai_k_Callback(hObject, eventdata, handles)
 % --- Executes during object creation, after setting all properties.
 function nilai_k_CreateFcn(hObject, eventdata, handles)
 % hObject    handle to nilai_k (see GCBO)
+% eventdata  reserved - to be defined in a future version of MATLAB
+% handles    empty - handles not created until after all CreateFcns called
+
+% Hint: edit controls usually have a white background on Windows.
+%       See ISPC and COMPUTER.
+if ispc && isequal(get(hObject,'BackgroundColor'), get(0,'defaultUicontrolBackgroundColor'))
+    set(hObject,'BackgroundColor','white');
+end
+
+
+
+function fmax_Callback(hObject, eventdata, handles)
+% hObject    handle to fmax (see GCBO)
+% eventdata  reserved - to be defined in a future version of MATLAB
+% handles    structure with handles and user data (see GUIDATA)
+
+% Hints: get(hObject,'String') returns contents of fmax as text
+%        str2double(get(hObject,'String')) returns contents of fmax as a double
+
+
+% --- Executes during object creation, after setting all properties.
+function fmax_CreateFcn(hObject, eventdata, handles)
+% hObject    handle to fmax (see GCBO)
+% eventdata  reserved - to be defined in a future version of MATLAB
+% handles    empty - handles not created until after all CreateFcns called
+
+% Hint: edit controls usually have a white background on Windows.
+%       See ISPC and COMPUTER.
+if ispc && isequal(get(hObject,'BackgroundColor'), get(0,'defaultUicontrolBackgroundColor'))
+    set(hObject,'BackgroundColor','white');
+end
+
+
+
+function fmin_Callback(hObject, eventdata, handles)
+% hObject    handle to fmin (see GCBO)
+% eventdata  reserved - to be defined in a future version of MATLAB
+% handles    structure with handles and user data (see GUIDATA)
+
+% Hints: get(hObject,'String') returns contents of fmin as text
+%        str2double(get(hObject,'String')) returns contents of fmin as a double
+
+
+% --- Executes during object creation, after setting all properties.
+function fmin_CreateFcn(hObject, eventdata, handles)
+% hObject    handle to fmin (see GCBO)
 % eventdata  reserved - to be defined in a future version of MATLAB
 % handles    empty - handles not created until after all CreateFcns called
 
