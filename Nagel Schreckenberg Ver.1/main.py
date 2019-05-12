@@ -52,7 +52,7 @@ car = set_car_speed(car)
 
 for x in range(1000):
     car = car_movement(car, x)
-    car = car_movement_reset(car, x)
+    car = car_reset(car, x)
     screen.update()
 
 root.mainloop() 
